@@ -1,6 +1,30 @@
 
 import React, { Component } from 'react';
 
+
+class Imgur {
+    static URL = 'https://api.imgur.com/3/';
+    static CLIENT_ID = 'c848e36012571f2';
+
+    static async gifs(page) {
+        const res = await fetch(`${Imgur.URL}gallery/hot/rising/${page}`,
+                                {
+                                    headers: {
+                                        Authorization: `Client-ID ${Imgur.CLIENT_ID}`
+                                    },
+                                    mode: 'cors'
+                                }),
+              json = await res.json();
+
+        if (json.success) {
+            return json.data.
+                        filter(({ type }) => ['image/gif', 'video/mp4'].includes(type))
+        }else{
+            throw new Error(json.data.error);
+        }
+    }
+}
+
 const QUOTES = [
     "I’m sorry, but your opinion means very little to me.",
     "Think for yourselves. Don’t be sheep.",
@@ -23,18 +47,49 @@ const RickQuote = () => (
     <h1>{QUOTES[Math.floor(Math.random()*QUOTES.length)]}</h1>
 );
 
-const Video = () => null;
+const Video = () => (
+    <video src= ...
+);
 
 const Button = () => (
     <button>Skip</button>
 );
 
 class MortysMindblowers extends Component {
+    state = {
+        gifs: [],
+        index: 0,
+        page: 0
+    }
+
+    componentDidMount() {
+        this.getGifs();
+    }
+
+    async getGifs() {
+        const { page } = this.state,
+              gifs = await Imgur.gifs(page);
+
+        this.setState({
+            gifs,
+            index: 0,
+            page: page+1
+        });
+    }
+
+    get currentGif() {
+        // return current URL
+    }
+
+    next() {
+        // advance to next gif
+    }
+
     render() {
         return (
             <div>
                 <RickQuote />
-                <Video />
+                <Video src={this.currentGif} />
                 <Button />
             </div>
         )
