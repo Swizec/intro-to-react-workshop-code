@@ -47,8 +47,8 @@ const RickQuote = () => (
     <h1>{QUOTES[Math.floor(Math.random()*QUOTES.length)]}</h1>
 );
 
-const Video = () => (
-    <video src= ...
+const Video = ({ src, onEnded }) => (
+    <video src={src} autoPlay onEnded={onEnded} />
 );
 
 const Button = () => (
@@ -78,18 +78,31 @@ class MortysMindblowers extends Component {
     }
 
     get currentGif() {
-        // return current URL
+        const { gifs, index } = this.state;
+
+        console.log(gifs);
+
+        return gifs.length ? gifs[index].mp4 : null;
+        //return gifs[index].mp4;
     }
 
-    next() {
+    next = () => {
         // advance to next gif
+        let { index } = this.state;
+
+        this.setState({
+            index: index+1
+        });
     }
 
     render() {
+        const { gifs } = this.state;
+
         return (
             <div>
                 <RickQuote />
-                <Video src={this.currentGif} />
+                <Video src={this.currentGif}
+                       onEnded={this.next}/>
                 <Button />
             </div>
         )
