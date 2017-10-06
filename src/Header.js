@@ -1,9 +1,9 @@
 
 import React from 'react';
 
-const Header = ({ logo }) => (
+const Header = (props) => (
     <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <img src={props.logo} className="App-logo" alt="logo" />
         <h1 className="App-title">Welcome to React</h1>
     </header>
 );
