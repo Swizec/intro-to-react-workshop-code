@@ -47,19 +47,20 @@ const RickQuote = () => (
     <h1>{QUOTES[Math.floor(Math.random()*QUOTES.length)]}</h1>
 );
 
-const Video = ({ src, onEnded }) => (
-    <video src={src} autoPlay onEnded={onEnded} />
+const Video = ({ src, onEnded, onClick }) => (
+    <video src={src} autoPlay onEnded={onEnded} onClick={onClick}/>
 );
 
-const Button = () => (
-    <button>Skip</button>
+const Skip = ({ onClick }) => (
+    <button onClick={onClick}>Skip</button>
 );
 
 class MortysMindblowers extends Component {
     state = {
         gifs: [],
         index: 0,
-        page: 0
+        page: 0,
+        noGifs: true
     }
 
     componentDidMount() {
@@ -72,6 +73,7 @@ class MortysMindblowers extends Component {
 
         this.setState({
             gifs,
+            noGifs: false,
             index: 0,
             page: page+1
         });
@@ -80,15 +82,17 @@ class MortysMindblowers extends Component {
     get currentGif() {
         const { gifs, index } = this.state;
 
-        console.log(gifs);
-
-        return gifs.length ? gifs[index].mp4 : null;
+        return gifs[index] ? gifs[index].mp4 : null;
         //return gifs[index].mp4;
     }
 
     next = () => {
         // advance to next gif
-        let { index } = this.state;
+        let { index, gifs } = this.state;
+
+        if (index+1 > gifs.length) {
+            this.getGifs();
+        }
 
         this.setState({
             index: index+1
@@ -96,14 +100,15 @@ class MortysMindblowers extends Component {
     }
 
     render() {
-        const { gifs } = this.state;
+        const { gifs, noGifs } = this.state;
 
         return (
             <div>
                 <RickQuote />
                 <Video src={this.currentGif}
-                       onEnded={this.next}/>
-                <Button />
+                       onEnded={this.next}
+                       onClick={this.next}/>
+                <Skip onClick={this.next} />
             </div>
         )
     }
