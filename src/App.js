@@ -9,7 +9,7 @@ import DancingTree from './DancingTree';
 class App extends Component {
   render() {
     return [
-        <DancingTree width="640" height="480" />
+        <DancingTree width={640} height="480" />
     ];
   }
 }

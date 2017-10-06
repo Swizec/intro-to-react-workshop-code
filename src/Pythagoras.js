@@ -29,15 +29,15 @@ const memoizedCalc = function () {
     }
 }();
 
-const Pythagoras = ({ width, height, lvl, maxlvl, x, y, left, right }) => {
+const Pythagoras = ({ width, height, lvl, maxlvl, x, y, heightFactor,lean, left, right }) => {
     if (lvl >= maxlvl) {
         return null;
     }
 
     const { nextRight, nextLeft, A, B } = memoizedCalc({
         w: width,
-        heightFactor: .4,
-        lean: 0
+        heightFactor: heightFactor,
+        lean: lean
     });
 
     let rotate = '';
@@ -56,11 +56,15 @@ const Pythagoras = ({ width, height, lvl, maxlvl, x, y, left, right }) => {
                         height={height}
                         x={0} y={-nextLeft}
                         lvl={lvl+1} maxlvl={maxlvl}
-                               left />
+                        heightFactor={heightFactor}
+                        lean={lean}
+                        left />
             <Pythagoras width={nextRight}
                         height={height}
                         x={width-nextRight} y={-nextRight}
                         lvl={lvl+1} maxlvl={maxlvl}
+                         heightFactor={heightFactor}
+                        lean={lean}
                         right />
         </g>
     )
